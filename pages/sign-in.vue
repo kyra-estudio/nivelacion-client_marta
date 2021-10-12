@@ -1,25 +1,50 @@
 <template>
   <div>
     <div class="row login_layout mt-5">
-      <h2 class="h3 mt-2 text-center font-weight-normal">Sign-in</h2>
-
       <div class="col-md-4 mx-auto">
-        <div class="mb-3">
-          <input v-model="email" type="email" class="form-control"  placeholder="email"/>
+        <div class="card card-body">
+          <h2 class="text-center">Login</h2>
+
+          <div class="mb-3">
+            <input
+              v-model="email"
+              type="email"
+              class="form-control"
+              placeholder="email"
+            />
+          </div>
+          <div class="mb-3">
+            <input
+              v-model="password"
+              type="password"
+              class="form-control"
+              placeholder="Password"
+            />
+          </div>          
+          <div class="d-grid gap-2 col-6 mx-auto">
+            <button @click="onClick" type="button" class="btn btn-secondary">
+              Entrar
+            </button>
+          </div>
+          <div class="my-4 text-center">
+            <p class="fw-bold">Aún no estás registrado??</p>
+            <a href="/sign-up" class="link-secondary">REGÍSTRATE</a>
+          </div>
         </div>
-        <div class="mb-3">
-          <input v-model="password" type="password" class="form-control" placeholder="Password"/>
-        </div>
-        <div class="d-grid gap-2 col-6 mx-auto">
-          <button @click="onClick"  type="button" class="btn btn-secondary">Entrar</button>
-        </div> 
-        <div class= "my-4 text-center" >
-          <a href="/sign-up">Sign-up</a>
-        </div>
-   </div>   
+      </div>
     </div>
   </div>
 </template>
+
+<style>
+
+.card-body {
+  background-color: antiquewhite;
+}
+.btn {
+  margin-top: 25px;
+}
+</style>
 
 <script>
 export default {
@@ -46,7 +71,7 @@ export default {
           },
           body: JSON.stringify(body),
         })
-       
+
         const data = await res.json()
         if (data.error) {
           alert(data.error)
@@ -55,16 +80,19 @@ export default {
 
         console.log({ data })
 
-        //Almacenar token:
-        const payload = {
-          token: data.token,
-        }
-        window.localStorage.setItem('token', JSON.stringify(payload))
+        //Almacenar datos en localStorage:
+
+        window.localStorage.setItem('token', data.token)
+        window.localStorage.setItem('userAdmin', data.user.admin)
+        window.localStorage.setItem('userId', data.user._id)
 
         //TODO:
         this.$router.push('/users/userslist')
-      } catch (err) {}
+      } catch (err) {
+        
+      }
     },
+    
   },
 }
 </script>
